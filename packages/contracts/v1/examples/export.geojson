@@ -1,0 +1,45 @@
+{
+  "type": "FeatureCollection",
+  "contractVersion": 1,
+  "features": [
+    {
+      "type": "Feature",
+      "id": "3f2b8c1e-7a4d-4e9b-9c21-5d6f0a1b2c3d",
+      "geometry": { "type": "Point", "coordinates": [11.0622, 35.5047] },
+      "properties": {
+        "createdAt": "2026-11-13T09:41:00+01:00",
+        "accuracyM": 6.5,
+        "context": "beach",
+        "comment": "Example only: not a real report.",
+        "photo": "3f2b8c1e-7a4d-4e9b-9c21-5d6f0a1b2c3d.jpg",
+        "modelVersion": "yolov8n-tunmarinelitter-v1-640-fp32",
+        "detections": [
+          { "source": "MODEL", "classId": 5, "modelClassId": 5, "confidence": 0.91, "box": { "x": 0.12, "y": 0.30, "width": 0.18, "height": 0.10 }, "deleted": false },
+          { "source": "MODEL", "classId": 2, "modelClassId": 4, "confidence": 0.41, "box": { "x": 0.55, "y": 0.62, "width": 0.07, "height": 0.15 }, "deleted": false },
+          { "source": "MODEL", "classId": 1, "modelClassId": 1, "confidence": 0.27, "box": { "x": 0.80, "y": 0.05, "width": 0.10, "height": 0.08 }, "deleted": true },
+          { "source": "USER", "classId": 3, "box": { "x": 0.33, "y": 0.70, "width": 0.05, "height": 0.05 }, "deleted": false }
+        ],
+        "counts": [
+          { "classId": 5, "count": 3 },
+          { "classId": 2, "count": 1 },
+          { "classId": 3, "count": 1 }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "9a0e4b7c-1d2f-4a3b-8c5d-6e7f8091a2b3",
+      "geometry": null,
+      "properties": {
+        "createdAt": "2026-11-13T09:55:12+01:00",
+        "accuracyM": null,
+        "context": "rocky_coast",
+        "comment": null,
+        "photo": "9a0e4b7c-1d2f-4a3b-8c5d-6e7f8091a2b3.jpg",
+        "modelVersion": "yolov8n-tunmarinelitter-v1-640-fp32",
+        "detections": [],
+        "counts": []
+      }
+    }
+  ]
+}

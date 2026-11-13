@@ -1,0 +1,99 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ecoscan.app/contracts/v1/report.schema.json",
+  "title": "EcoScan report",
+  "description": "One litter report as a GeoJSON Feature (RFC 7946). Written by the mobile export (V1), received by the API (V2).",
+  "type": "object",
+  "required": ["type", "id", "geometry", "properties"],
+  "additionalProperties": false,
+  "properties": {
+    "type": { "const": "Feature" },
+    "id": {
+      "description": "UUID generated on the phone; stable across export and sync.",
+      "type": "string",
+      "format": "uuid",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+    },
+    "geometry": {
+      "description": "Point [longitude, latitude] in WGS 84, or null while the position is still unknown.",
+      "oneOf": [
+        { "type": "null" },
+        {
+          "type": "object",
+          "required": ["type", "coordinates"],
+          "additionalProperties": false,
+          "properties": {
+            "type": { "const": "Point" },
+            "coordinates": {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 2,
+              "prefixItems": [
+                { "type": "number", "minimum": -180, "maximum": 180 },
+                { "type": "number", "minimum": -90, "maximum": 90 }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "properties": {
+      "type": "object",
+      "required": ["createdAt", "accuracyM", "context", "comment", "photo", "modelVersion", "detections", "counts"],
+      "additionalProperties": false,
+      "properties": {
+        "createdAt": { "type": "string", "format": "date-time" },
+        "accuracyM": { "description": "Horizontal accuracy of the position, in metres.", "type": ["number", "null"], "minimum": 0 },
+        "context": { "enum": ["beach", "rocky_coast", "forest", "city"] },
+        "comment": { "type": ["string", "null"], "maxLength": 2000 },
+        "photo": { "description": "Photo file name inside the export archive (JPEG, long side <= 1600 px, EXIF removed).", "type": "string", "pattern": "^[^/\\\\]+\\.jpe?g$" },
+        "modelVersion": { "description": "model.json version that produced the MODEL detections.", "type": "string" },
+        "detections": { "type": "array", "items": { "$ref": "#/$defs/detection" } },
+        "counts": {
+          "description": "Quantities validated by the user, per class. May exceed the boxes (objects the model missed).",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["classId", "count"],
+            "additionalProperties": false,
+            "properties": {
+              "classId": { "$ref": "#/$defs/classId" },
+              "count": { "type": "integer", "minimum": 0 }
+            }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "classId": { "description": "Index in classes.json.", "type": "integer", "minimum": 0, "maximum": 6 },
+    "detection": {
+      "description": "A box. MODEL boxes keep the model's original class in modelClassId, so raw output and corrections stay separable for retraining.",
+      "type": "object",
+      "required": ["source", "classId", "box", "deleted"],
+      "additionalProperties": false,
+      "properties": {
+        "source": { "enum": ["MODEL", "USER"] },
+        "classId": { "description": "Final class, after any user correction.", "$ref": "#/$defs/classId" },
+        "modelClassId": { "$ref": "#/$defs/classId" },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "box": {
+          "description": "Top-left corner and size, normalised to 0..1 in the upright photo.",
+          "type": "object",
+          "required": ["x", "y", "width", "height"],
+          "additionalProperties": false,
+          "properties": {
+            "x": { "type": "number", "minimum": 0, "maximum": 1 },
+            "y": { "type": "number", "minimum": 0, "maximum": 1 },
+            "width": { "type": "number", "exclusiveMinimum": 0, "maximum": 1 },
+            "height": { "type": "number", "exclusiveMinimum": 0, "maximum": 1 }
+          }
+        },
+        "deleted": { "description": "True when the user removed a wrong MODEL box.", "type": "boolean" }
+      },
+      "if": { "properties": { "source": { "const": "MODEL" } } },
+      "then": { "required": ["modelClassId", "confidence"] },
+      "else": { "not": { "anyOf": [{ "required": ["modelClassId"] }, { "required": ["confidence"] }] } }
+    }
+  }
+}

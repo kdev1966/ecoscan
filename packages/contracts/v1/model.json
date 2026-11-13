@@ -1,0 +1,48 @@
+{
+  "version": "yolov8n-tunmarinelitter-v1-640-fp32",
+  "architecture": "YOLOv8n (Ultralytics), detection",
+  "task": "detect",
+  "classes": "classes.json",
+  "files": {
+    "tflite": {
+      "name": "ecoscan_detector_v1.tflite",
+      "source": "best_saved_model/best_float32.tflite",
+      "bytes": 12692100,
+      "sha256": "a867a172ae09d6aaa3af367525d7319dea13868a4f6f08aaf23cc3c6d94c78c5"
+    }
+  },
+  "input": {
+    "shape": [1, 640, 640, 3],
+    "dtype": "float32",
+    "layout": "NHWC",
+    "color": "RGB",
+    "range": [0.0, 1.0],
+    "resize": "letterbox",
+    "padColor": "#727272"
+  },
+  "output": {
+    "shape": [1, 11, 8400],
+    "rows": "cx, cy, w, h in input pixels, then one score per class (7)",
+    "anchors": 8400
+  },
+  "postprocess": {
+    "confidenceThreshold": 0.25,
+    "iouThreshold": 0.7,
+    "nms": "per class",
+    "maxDetections": 300
+  },
+  "training": {
+    "dataset": "TUN-MED-MAR-UAV-LITTER, non-augmented split (base1)",
+    "epochs": 30,
+    "exportedWith": "ultralytics 8.4.203 (onnx2tf 1.26.3, tensorflow 2.16.2)"
+  },
+  "evaluation": {
+    "date": "2026-11-06",
+    "split": "test, non-augmented (179 images, 360 objects, drone views)",
+    "precision": 0.859,
+    "recall": 0.917,
+    "mAP50": 0.933,
+    "mAP50_95": 0.835,
+    "caveat": "Drone views only. Phone photos not measured yet (field test pending)."
+  }
+}

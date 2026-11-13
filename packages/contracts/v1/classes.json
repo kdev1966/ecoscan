@@ -1,0 +1,14 @@
+{
+  "$schema": "./classes.schema.json",
+  "version": 1,
+  "note": "Order = output index of the model. Never reorder: a report stores classId, not the name. The dataset's data.yaml spells index 0 'Cardboar' (typo); the canonical id is 'cardboard'.",
+  "classes": [
+    { "id": "cardboard", "index": 0, "datasetName": "Cardboar", "color": "#B0793C", "labels": { "en": "Cardboard", "fr": "Carton",    "ar": "ورق مقوّى" } },
+    { "id": "fabrics",   "index": 1, "datasetName": "Fabrics",  "color": "#E91E63", "labels": { "en": "Fabric",    "fr": "Textile",   "ar": "قماش" } },
+    { "id": "glass",     "index": 2, "datasetName": "Glass",    "color": "#00BCD4", "labels": { "en": "Glass",     "fr": "Verre",     "ar": "زجاج" } },
+    { "id": "metal",     "index": 3, "datasetName": "Metal",    "color": "#90A4AE", "labels": { "en": "Metal",     "fr": "Métal",     "ar": "معدن" } },
+    { "id": "other",     "index": 4, "datasetName": "Other",    "color": "#AB47BC", "labels": { "en": "Other",     "fr": "Autre",     "ar": "أخرى" } },
+    { "id": "plastic",   "index": 5, "datasetName": "Plastic",  "color": "#FFC107", "labels": { "en": "Plastic",   "fr": "Plastique", "ar": "بلاستيك" } },
+    { "id": "wood",      "index": 6, "datasetName": "Wood",     "color": "#8D6E63", "labels": { "en": "Wood",      "fr": "Bois",      "ar": "خشب" } }
+  ]
+}

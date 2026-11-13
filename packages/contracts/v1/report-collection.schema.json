@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ecoscan.app/contracts/v1/report-collection.schema.json",
+  "title": "EcoScan export",
+  "description": "The GeoJSON file of an export (V1) and the import format of the API (V2).",
+  "type": "object",
+  "required": ["type", "contractVersion", "features"],
+  "properties": {
+    "type": { "const": "FeatureCollection" },
+    "contractVersion": { "const": 1 },
+    "features": { "type": "array", "items": { "$ref": "report.schema.json" } }
+  }
+}
