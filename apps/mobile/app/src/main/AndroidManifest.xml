@@ -21,6 +21,17 @@
         android:theme="@style/Theme.EcoScan"
         tools:targetApi="33">
 
+        <!-- Partage de l'archive d'export (menu Android) : seul le dossier cache/exports est exposé. -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.exports"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/export_paths" />
+        </provider>
+
         <activity
             android:name=".ui.MainActivity"
             android:exported="true"

@@ -36,7 +36,8 @@ class ReportRepository(
             val id = UUID.randomUUID().toString()
             val now = clock()
             val photoFile = photos.write(id, photo)
-            val detections = result.detections.map {
+            // Une boîte réduite à un trait (tombée dans la bande de remplissage) est invisible et refusée par le contrat.
+            val detections = result.detections.filter { it.box.width > 0f && it.box.height > 0f }.map {
                 ReviewedDetection(
                     id = 0,
                     source = DetectionSource.MODEL,
@@ -83,6 +84,30 @@ class ReportRepository(
             r?.let { toReport(it, d, c) }
         }
 
+    /** Historique : les signalements enregistrés avec leur total, du plus récent au plus ancien. */
+    fun observeHistory(): Flow<List<ReportSummary>> =
+        combine(dao.observeSavedReports(), dao.observeAllCounts()) { reports, counts ->
+            val totals = counts.groupBy { it.reportId }.mapValues { (_, c) -> c.sumOf { it.count } }
+            reports.map {
+                ReportSummary(
+                    id = it.id,
+                    createdAtMs = it.createdAtMs,
+                    utcOffsetMinutes = it.utcOffsetMinutes,
+                    context = ReportContext.fromId(it.context),
+                    total = totals[it.id] ?: 0,
+                    located = it.latitude != null,
+                    photo = photos.file(it.photoFile),
+                )
+            }
+        }
+
+    /** Tous les signalements enregistrés, complets (pour l'export), lus dans une même transaction. */
+    suspend fun savedReports(): List<Report> = withContext(Dispatchers.IO) {
+        db.withTransaction {
+            dao.savedReports().map { toReport(it, dao.detections(it.id), dao.counts(it.id)) }
+        }
+    }
+
     suspend fun latestDraftId(): String? = withContext(Dispatchers.IO) { dao.latestDraftId() }
 
     /**
@@ -114,7 +139,7 @@ class ReportRepository(
         }
     }
 
-    /** Abandonne un signalement : la ligne d'abord (les détections suivent), puis la photo. */
+    /** Abandonne un brouillon ou supprime un signalement : la ligne d'abord (les détections suivent), puis la photo. */
     suspend fun discard(id: String) = withContext(Dispatchers.IO) {
         val entity = dao.report(id) ?: return@withContext
         dao.deleteReport(id)

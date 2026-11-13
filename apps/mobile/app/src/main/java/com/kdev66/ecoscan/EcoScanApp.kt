@@ -8,6 +8,7 @@ import com.kdev66.ecoscan.location.LocationTracker
 import com.kdev66.ecoscan.report.data.EcoScanDatabase
 import com.kdev66.ecoscan.report.data.PhotoStore
 import com.kdev66.ecoscan.report.data.ReportRepository
+import com.kdev66.ecoscan.report.export.ExportFiles
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -44,6 +45,10 @@ class AppContainer(private val context: Context) {
     val reports by lazy { ReportRepository(database, PhotoStore(File(context.filesDir, "photos"))) }
 
     val location by lazy { LocationTracker(context, reports, applicationScope) }
+
+    val preferences by lazy { AppPreferences(context) }
+
+    val exports by lazy { ExportFiles(context, reports) }
 }
 
 val Context.appContainer: AppContainer get() = (applicationContext as EcoScanApp).container

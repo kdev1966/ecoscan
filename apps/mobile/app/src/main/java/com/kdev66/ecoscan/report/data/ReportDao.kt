@@ -44,6 +44,16 @@ interface ReportDao {
     @Query("SELECT * FROM category_count WHERE reportId = :reportId ORDER BY classIndex")
     fun observeCounts(reportId: String): Flow<List<CategoryCountEntity>>
 
+    /** Signalements enregistrés, du plus récent au plus ancien (l'historique ne montre pas les brouillons). */
+    @Query("SELECT * FROM report WHERE status = 'SAVED' ORDER BY createdAtMs DESC")
+    fun observeSavedReports(): Flow<List<ReportEntity>>
+
+    @Query("SELECT * FROM report WHERE status = 'SAVED' ORDER BY createdAtMs DESC")
+    suspend fun savedReports(): List<ReportEntity>
+
+    @Query("SELECT * FROM category_count")
+    fun observeAllCounts(): Flow<List<CategoryCountEntity>>
+
     @Query("SELECT id FROM report WHERE status = 'DRAFT' ORDER BY createdAtMs DESC LIMIT 1")
     suspend fun latestDraftId(): String?
 

@@ -81,6 +81,9 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.8.1")
 
     testImplementation("junit:junit:4.13.2")
+    // org.json réel (l'android.jar des tests unitaires n'en a que des bouchons) et validation du contrat v1
+    testImplementation("org.json:json:20240303")
+    testImplementation("com.networknt:json-schema-validator:1.5.1")
     androidTestImplementation("androidx.test.ext:junit:1.2.1")
     androidTestImplementation("androidx.test:runner:1.6.2")
     androidTestImplementation("androidx.exifinterface:exifinterface:1.3.2") // même version que CameraX (dépendance de l'app)
