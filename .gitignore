@@ -1,10 +1,41 @@
+# OS / IDE
+.DS_Store
+.idea/
+*.iml
+.vscode/
+
+# Android / Gradle (apps/mobile)
 .gradle/
 .kotlin/
 build/
 local.properties
-.idea/
-*.iml
-.DS_Store
 captures/
 *.jks
 *.keystore
+
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Python (ml, apps/brain)
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+
+# Node (apps/web, apps/admin)
+node_modules/
+dist/
+
+# ML: datasets, weights and training runs stay outside the repository (see ml/README.md).
+# Only the model shipped in the app is versioned (apps/mobile/app/src/main/assets/*.tflite).
+*.pt
+*.onnx
+*.h5
+saved_model/
+*_saved_model/
+runs/
+datasets/
