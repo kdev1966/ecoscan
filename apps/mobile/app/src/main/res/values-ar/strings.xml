@@ -57,6 +57,31 @@
     <string name="review_discard_confirm">تخلٍّ</string>
     <string name="review_keep">متابعة</string>
 
+    <string name="privacy_notice_title">الأشخاص في الصور</string>
+    <string name="privacy_notice_message">صوّب الكاميرا نحو النفايات لا نحو الأشخاص. تبقى الصور على هاتفك ولا تخرج منه إلا إذا صدّرتها.</string>
+    <string name="privacy_notice_ok">فهمت</string>
+    <string name="back">رجوع</string>
+    <string name="experimental">تجريبي</string>
+
+    <string name="history_title">بلاغاتي</string>
+    <string name="history_empty">لا توجد بلاغات بعد. التقط صورة للنفايات وراجع النتيجة ثم احفظها: ستظهر هنا.</string>
+    <string name="export_all">تصدير كل البلاغات</string>
+    <string name="export_share">مشاركة التصدير</string>
+    <string name="export_failed">تعذّر تحضير التصدير</string>
+    <plurals name="export_missing_photos">
+        <item quantity="zero">لا توجد صور مفقودة</item>
+        <item quantity="one">صورة واحدة مفقودة وليست في التصدير</item>
+        <item quantity="two">صورتان مفقودتان وليستا في التصدير</item>
+        <item quantity="few">%d صور مفقودة وليست في التصدير</item>
+        <item quantity="many">%d صورة مفقودة وليست في التصدير</item>
+        <item quantity="other">%d صورة مفقودة وليست في التصدير</item>
+    </plurals>
+    <string name="report_title">البلاغ</string>
+    <string name="report_delete">حذف</string>
+    <string name="report_delete_title">حذف هذا البلاغ؟</string>
+    <string name="report_open_map">فتح في تطبيق خرائط</string>
+    <string name="report_no_map_app">لا يوجد تطبيق خرائط مثبّت</string>
+
     <string name="class_cardboard">ورق مقوّى</string>
     <string name="class_fabrics">قماش</string>
     <string name="class_glass">زجاج</string>

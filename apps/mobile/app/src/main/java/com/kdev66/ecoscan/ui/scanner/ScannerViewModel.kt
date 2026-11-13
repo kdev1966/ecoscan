@@ -8,6 +8,7 @@ import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.ImageProxy
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kdev66.ecoscan.AppPreferences
 import com.kdev66.ecoscan.R
 import com.kdev66.ecoscan.camera.toUprightBitmap
 import com.kdev66.ecoscan.detection.DetectionResult
@@ -38,6 +39,7 @@ data class ScannerUiState(
 class ScannerViewModel(
     private val detectorProvider: () -> WasteDetector,
     private val createDraft: suspend (photo: Bitmap, result: DetectionResult) -> String,
+    private val preferences: AppPreferences,
 ) : ViewModel() {
 
     val analysisExecutor: ExecutorService = Executors.newSingleThreadExecutor()
@@ -96,6 +98,13 @@ class ScannerViewModel(
                 _state.update { it.copy(capturing = false, error = R.string.error_camera) }
             }
         })
+    }
+
+    /** Avant la toute première capture : prévenir que des personnes peuvent apparaître sur la photo (PRD § 6). */
+    fun needsPrivacyNotice(): Boolean = !preferences.privacyNoticeShown
+
+    fun acknowledgePrivacyNotice() {
+        preferences.privacyNoticeShown = true
     }
 
     fun onCameraError(e: Throwable) {

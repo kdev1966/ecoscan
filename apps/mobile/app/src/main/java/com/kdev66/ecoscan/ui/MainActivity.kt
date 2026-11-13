@@ -21,6 +21,10 @@ import com.kdev66.ecoscan.AppContainer
 import com.kdev66.ecoscan.R
 import com.kdev66.ecoscan.appContainer
 import com.kdev66.ecoscan.detection.WasteDetector
+import com.kdev66.ecoscan.ui.history.HistoryScreen
+import com.kdev66.ecoscan.ui.history.HistoryViewModel
+import com.kdev66.ecoscan.ui.history.ReportDetailScreen
+import com.kdev66.ecoscan.ui.history.ReportDetailViewModel
 import com.kdev66.ecoscan.ui.review.ReviewOutcome
 import com.kdev66.ecoscan.ui.review.ReviewScreen
 import com.kdev66.ecoscan.ui.review.ReviewViewModel
@@ -47,6 +51,7 @@ class MainActivity : ComponentActivity() {
                                     container.location.locate(draft.id, draft.createdAtMs)
                                     draft.id
                                 },
+                                preferences = container.preferences,
                             )
                         }
                     },
@@ -60,7 +65,10 @@ class MainActivity : ComponentActivity() {
 private object Routes {
     const val SCANNER = "scanner"
     const val REVIEW = "review/{reportId}"
+    const val HISTORY = "history"
+    const val REPORT = "report/{reportId}"
     fun review(reportId: String) = "review/$reportId"
+    fun report(reportId: String) = "report/$reportId"
 }
 
 @Composable
@@ -78,7 +86,27 @@ private fun EcoScanNavHost(container: AppContainer, scanner: ScannerViewModel) {
     }
 
     NavHost(navController, startDestination = Routes.SCANNER) {
-        composable(Routes.SCANNER) { ScannerScreen(scanner) }
+        composable(Routes.SCANNER) {
+            ScannerScreen(scanner, onOpenHistory = { navController.navigate(Routes.HISTORY) { launchSingleTop = true } })
+        }
+        composable(Routes.HISTORY) {
+            val history: HistoryViewModel = viewModel(
+                factory = viewModelFactory { initializer { HistoryViewModel(container.reports, container.exports) } },
+            )
+            HistoryScreen(
+                viewModel = history,
+                exports = container.exports,
+                onOpenReport = { navController.navigate(Routes.report(it)) },
+                onBack = { navController.popBackStack() },
+            )
+        }
+        composable(Routes.REPORT, arguments = listOf(navArgument("reportId") { type = NavType.StringType })) { entry ->
+            val reportId = requireNotNull(entry.arguments?.getString("reportId"))
+            val detail: ReportDetailViewModel = viewModel(
+                factory = viewModelFactory { initializer { ReportDetailViewModel(reportId, container.reports) } },
+            )
+            ReportDetailScreen(detail, onBack = { navController.popBackStack() })
+        }
         composable(Routes.REVIEW, arguments = listOf(navArgument("reportId") { type = NavType.StringType })) { entry ->
             val reportId = requireNotNull(entry.arguments?.getString("reportId"))
             val review: ReviewViewModel = viewModel(
@@ -101,6 +129,8 @@ private fun EcoScanNavHost(container: AppContainer, scanner: ScannerViewModel) {
 }
 
 private fun NavHostController.openReview(reportId: String) {
-    if (currentBackStackEntry?.arguments?.getString("reportId") == reportId) return
+    if (currentDestination?.route == Routes.REVIEW &&
+        currentBackStackEntry?.arguments?.getString("reportId") == reportId
+    ) return
     navigate(Routes.review(reportId)) { launchSingleTop = true }
 }

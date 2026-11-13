@@ -84,6 +84,7 @@ import com.kdev66.ecoscan.report.ReportEdits
 import com.kdev66.ecoscan.report.ReviewedDetection
 import com.kdev66.ecoscan.ui.components.BoxOverlay
 import com.kdev66.ecoscan.ui.components.ImageFit
+import com.kdev66.ecoscan.ui.components.labelRes
 import com.kdev66.ecoscan.ui.components.OverlayBox
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
@@ -382,11 +383,4 @@ private fun DetectionEditor(
             modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp),
         ) { Text(stringResource(R.string.review_delete)) }
     }
-}
-
-private fun ReportContext.labelRes(): Int = when (this) {
-    ReportContext.BEACH -> R.string.context_beach
-    ReportContext.ROCKY_COAST -> R.string.context_rocky_coast
-    ReportContext.FOREST -> R.string.context_forest
-    ReportContext.CITY -> R.string.context_city
 }

@@ -55,6 +55,27 @@
     <string name="review_discard_confirm">Discard</string>
     <string name="review_keep">Keep editing</string>
 
+    <string name="privacy_notice_title">People in photos</string>
+    <string name="privacy_notice_message">Point the camera at the litter, not at people. Photos stay on your phone; they leave it only if you export them.</string>
+    <string name="privacy_notice_ok">Understood</string>
+    <string name="back">Back</string>
+    <string name="experimental">experimental</string>
+
+    <string name="history_title">My reports</string>
+    <string name="history_empty">No report yet. Capture litter, check the result, then save it: it will appear here.</string>
+    <string name="export_all">Export all reports</string>
+    <string name="export_share">Share the export</string>
+    <string name="export_failed">The export could not be prepared</string>
+    <plurals name="export_missing_photos">
+        <item quantity="one">%d photo was missing and is not in the export</item>
+        <item quantity="other">%d photos were missing and are not in the export</item>
+    </plurals>
+    <string name="report_title">Report</string>
+    <string name="report_delete">Delete</string>
+    <string name="report_delete_title">Delete this report?</string>
+    <string name="report_open_map">Open in a map app</string>
+    <string name="report_no_map_app">No map app installed</string>
+
     <string name="class_cardboard">Cardboard</string>
     <string name="class_fabrics">Fabric</string>
     <string name="class_glass">Glass</string>

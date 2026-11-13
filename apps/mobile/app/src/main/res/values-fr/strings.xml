@@ -54,6 +54,28 @@
     <string name="review_discard_confirm">Abandonner</string>
     <string name="review_keep">Continuer</string>
 
+    <string name="privacy_notice_title">Personnes sur les photos</string>
+    <string name="privacy_notice_message">Visez les déchets, pas les personnes. Les photos restent sur votre téléphone ; elles n\'en sortent que si vous les exportez.</string>
+    <string name="privacy_notice_ok">J\'ai compris</string>
+    <string name="back">Retour</string>
+    <string name="experimental">expérimental</string>
+
+    <string name="history_title">Mes signalements</string>
+    <string name="history_empty">Aucun signalement pour l\'instant. Capturez des déchets, vérifiez le résultat puis enregistrez-le : il apparaîtra ici.</string>
+    <string name="export_all">Exporter tous les signalements</string>
+    <string name="export_share">Partager l\'export</string>
+    <string name="export_failed">Impossible de préparer l\'export</string>
+    <plurals name="export_missing_photos">
+        <item quantity="one">%d photo manquait et n\'est pas dans l\'export</item>
+        <item quantity="many">%d photos manquaient et ne sont pas dans l\'export</item>
+        <item quantity="other">%d photos manquaient et ne sont pas dans l\'export</item>
+    </plurals>
+    <string name="report_title">Signalement</string>
+    <string name="report_delete">Supprimer</string>
+    <string name="report_delete_title">Supprimer ce signalement ?</string>
+    <string name="report_open_map">Ouvrir dans une application de cartes</string>
+    <string name="report_no_map_app">Aucune application de cartes installée</string>
+
     <string name="class_cardboard">Carton</string>
     <string name="class_fabrics">Textile</string>
     <string name="class_glass">Verre</string>

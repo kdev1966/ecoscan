@@ -21,7 +21,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHost
@@ -34,6 +38,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -57,7 +62,7 @@ import com.kdev66.ecoscan.ui.components.DetectionOverlay
 import com.kdev66.ecoscan.ui.components.ImageFit
 
 @Composable
-fun ScannerScreen(viewModel: ScannerViewModel) {
+fun ScannerScreen(viewModel: ScannerViewModel, onOpenHistory: () -> Unit) {
     val context = LocalContext.current
     var hasPermission by remember {
         mutableStateOf(
@@ -69,14 +74,14 @@ fun ScannerScreen(viewModel: ScannerViewModel) {
     }
 
     if (hasPermission) {
-        CameraScanner(viewModel)
+        CameraScanner(viewModel, onOpenHistory)
     } else {
         PermissionRequest(onGrant = { launcher.launch(Manifest.permission.CAMERA) })
     }
 }
 
 @Composable
-private fun CameraScanner(viewModel: ScannerViewModel) {
+private fun CameraScanner(viewModel: ScannerViewModel, onOpenHistory: () -> Unit) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val imageCapture = remember {
         ImageCapture.Builder().setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY).build()
@@ -92,6 +97,36 @@ private fun CameraScanner(viewModel: ScannerViewModel) {
         )
         state.live?.let { DetectionOverlay(it, ImageFit.FILL, Modifier.fillMaxSize()) }
 
+        var showPrivacyNotice by rememberSaveable { mutableStateOf(false) }
+        if (showPrivacyNotice) {
+            AlertDialog(
+                onDismissRequest = { showPrivacyNotice = false },
+                title = { Text(stringResource(R.string.privacy_notice_title)) },
+                text = { Text(stringResource(R.string.privacy_notice_message)) },
+                confirmButton = {
+                    TextButton(onClick = {
+                        showPrivacyNotice = false
+                        viewModel.acknowledgePrivacyNotice()
+                        viewModel.capture(imageCapture)
+                    }) { Text(stringResource(R.string.privacy_notice_ok)) }
+                },
+                dismissButton = {
+                    TextButton(onClick = { showPrivacyNotice = false }) { Text(stringResource(android.R.string.cancel)) }
+                },
+            )
+        }
+
+        IconButton(
+            onClick = onOpenHistory,
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .windowInsetsPadding(WindowInsets.safeDrawing)
+                .padding(8.dp)
+                .background(Color.Black.copy(alpha = 0.55f), CircleShape),
+        ) {
+            Icon(Icons.AutoMirrored.Filled.List, stringResource(R.string.history_title), tint = Color.White)
+        }
+
         // Consigne de prise de vue (le modèle a appris sur des vues verticales prises par drone)
         Text(
             stringResource(R.string.scanner_hint),
@@ -101,7 +136,7 @@ private fun CameraScanner(viewModel: ScannerViewModel) {
             modifier = Modifier
                 .align(Alignment.TopCenter)
                 .windowInsetsPadding(WindowInsets.safeDrawing)
-                .padding(16.dp)
+                .padding(start = 64.dp, end = 64.dp, top = 16.dp)
                 .background(Color.Black.copy(alpha = 0.55f), RoundedCornerShape(12.dp))
                 .padding(horizontal = 16.dp, vertical = 10.dp),
         )
@@ -129,7 +164,9 @@ private fun CameraScanner(viewModel: ScannerViewModel) {
                 )
             }
             Spacer(Modifier.height(12.dp))
-            CaptureButton(capturing = state.capturing, onClick = { viewModel.capture(imageCapture) })
+            CaptureButton(capturing = state.capturing, onClick = {
+                if (viewModel.needsPrivacyNotice()) showPrivacyNotice = true else viewModel.capture(imageCapture)
+            })
         }
 
         val snackbar = remember { SnackbarHostState() }
