@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="scanner_hint">أمسك الهاتف فوق النفايات</string>
+    <string name="permission_camera_rationale">يحتاج EcoScan إلى الكاميرا لرصد النفايات. تبقى الصور على هاتفك.</string>
+    <string name="permission_grant">السماح باستخدام الكاميرا</string>
+    <string name="capture">التقاط</string>
+    <string name="analyzing">جارٍ التحليل…</string>
+    <string name="inference_time">%1$d ملّي ثانية</string>
+
+    <string name="result_title">التحليل</string>
+    <plurals name="items_detected">
+        <item quantity="zero">لم يُرصد أي عنصر</item>
+        <item quantity="one">رُصد عنصر واحد</item>
+        <item quantity="two">رُصد عنصران</item>
+        <item quantity="few">رُصدت %d عناصر</item>
+        <item quantity="many">رُصد %d عنصرًا</item>
+        <item quantity="other">رُصد %d عنصر</item>
+    </plurals>
+    <string name="result_none">لم تُرصد أي نفايات. حاول مجددًا بالاقتراب من الأرض.</string>
+    <string name="result_estimate_note">الكميات تقديرية: قد تفوت بعض الأشياء المتراكبة.</string>
+    <string name="result_inference">مدة التحليل: %1$d ملّي ثانية</string>
+    <string name="new_scan">تحليل جديد</string>
+
+    <string name="error_camera">الكاميرا غير متاحة</string>
+    <string name="error_model">تعذّر تحميل نموذج الرصد</string>
+
+    <string name="class_cardboard">ورق مقوّى</string>
+    <string name="class_fabrics">قماش</string>
+    <string name="class_glass">زجاج</string>
+    <string name="class_metal">معدن</string>
+    <string name="class_other">أخرى</string>
+    <string name="class_plastic">بلاستيك</string>
+    <string name="class_wood">خشب</string>
+</resources>

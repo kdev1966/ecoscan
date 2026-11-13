@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="scanner_hint">Tenez le téléphone au-dessus des déchets</string>
+    <string name="permission_camera_rationale">EcoScan a besoin de la caméra pour détecter les déchets. Les images restent sur votre téléphone.</string>
+    <string name="permission_grant">Autoriser la caméra</string>
+    <string name="capture">Capturer</string>
+    <string name="analyzing">Analyse…</string>
+    <string name="inference_time">%1$d ms</string>
+
+    <string name="result_title">Analyse</string>
+    <plurals name="items_detected">
+        <item quantity="one">%d déchet détecté</item>
+        <item quantity="many">%d déchets détectés</item>
+        <item quantity="other">%d déchets détectés</item>
+    </plurals>
+    <string name="result_none">Aucun déchet détecté. Réessayez plus près du sol.</string>
+    <string name="result_estimate_note">Les quantités sont des estimations : des objets qui se chevauchent peuvent manquer.</string>
+    <string name="result_inference">Durée de l\'analyse : %1$d ms</string>
+    <string name="new_scan">Nouvelle analyse</string>
+
+    <string name="error_camera">Caméra indisponible</string>
+    <string name="error_model">Impossible de charger le modèle de détection</string>
+
+    <string name="class_cardboard">Carton</string>
+    <string name="class_fabrics">Textile</string>
+    <string name="class_glass">Verre</string>
+    <string name="class_metal">Métal</string>
+    <string name="class_other">Autre</string>
+    <string name="class_plastic">Plastique</string>
+    <string name="class_wood">Bois</string>
+</resources>

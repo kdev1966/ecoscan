@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Thème de la fenêtre seulement : l'interface est dessinée par Compose (ui/theme/Theme.kt). -->
+    <style name="Theme.EcoScan" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:windowBackground">@android:color/black</item>
+    </style>
+
+    <color name="ic_launcher_background">#2E7D32</color>
+</resources>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">EcoScan</string>
+
+    <string name="scanner_hint">Hold the phone above the litter</string>
+    <string name="permission_camera_rationale">EcoScan needs the camera to detect litter. Images stay on your phone.</string>
+    <string name="permission_grant">Allow camera</string>
+    <string name="capture">Capture</string>
+    <string name="analyzing">Analyzing…</string>
+    <string name="inference_time">%1$d ms</string>
+
+    <string name="result_title">Analysis</string>
+    <plurals name="items_detected">
+        <item quantity="one">%d item detected</item>
+        <item quantity="other">%d items detected</item>
+    </plurals>
+    <string name="result_none">No litter detected. Try again closer to the ground.</string>
+    <string name="result_estimate_note">Counts are estimates: overlapping items may be missed.</string>
+    <string name="result_inference">Analysis time: %1$d ms</string>
+    <string name="new_scan">New scan</string>
+
+    <string name="error_camera">Camera unavailable</string>
+    <string name="error_model">The detection model could not be loaded</string>
+
+    <string name="class_cardboard">Cardboard</string>
+    <string name="class_fabrics">Fabric</string>
+    <string name="class_glass">Glass</string>
+    <string name="class_metal">Metal</string>
+    <string name="class_other">Other</string>
+    <string name="class_plastic">Plastic</string>
+    <string name="class_wood">Wood</string>
+</resources>
