@@ -7,19 +7,52 @@
     <string name="analyzing">Analyse…</string>
     <string name="inference_time">%1$d ms</string>
 
-    <string name="result_title">Analyse</string>
-    <plurals name="items_detected">
-        <item quantity="one">%d déchet détecté</item>
-        <item quantity="many">%d déchets détectés</item>
-        <item quantity="other">%d déchets détectés</item>
-    </plurals>
     <string name="result_none">Aucun déchet détecté. Réessayez plus près du sol.</string>
     <string name="result_estimate_note">Les quantités sont des estimations : des objets qui se chevauchent peuvent manquer.</string>
-    <string name="result_inference">Durée de l\'analyse : %1$d ms</string>
-    <string name="new_scan">Nouvelle analyse</string>
 
     <string name="error_camera">Caméra indisponible</string>
     <string name="error_model">Impossible de charger le modèle de détection</string>
+
+    <string name="error_storage">Impossible d\'enregistrer le signalement sur le téléphone</string>
+    <string name="report_saved">Signalement enregistré</string>
+    <string name="report_discarded">Signalement abandonné</string>
+
+    <string name="review_title">Vérifier le signalement</string>
+    <string name="review_tap_hint">Touchez une boîte pour la corriger ou la supprimer.</string>
+    <string name="review_quantities">Quantités</string>
+    <plurals name="review_total">
+        <item quantity="one">%d déchet au total</item>
+        <item quantity="many">%d déchets au total</item>
+        <item quantity="other">%d déchets au total</item>
+    </plurals>
+    <string name="review_decrease">Un %1$s de moins</string>
+    <string name="review_increase">Un %1$s de plus</string>
+    <string name="review_context">Lieu</string>
+    <string name="context_beach">Plage</string>
+    <string name="context_rocky_coast">Littoral rocheux</string>
+    <string name="context_forest">Forêt</string>
+    <string name="context_city">Ville</string>
+    <string name="review_experimental">Expérimental : le modèle n\'a appris que sur des plages, la détection est moins fiable ici.</string>
+    <string name="review_position">Position</string>
+    <string name="position_accuracy">Position trouvée, à %1$d m près</string>
+    <string name="position_known">Position trouvée</string>
+    <string name="position_searching">Recherche de la position… (fonctionne sans réseau)</string>
+    <string name="position_rationale">EcoScan utilise la position pour situer le signalement. Elle reste sur votre téléphone.</string>
+    <string name="position_grant">Autoriser la localisation</string>
+    <string name="position_unavailable">Position indisponible</string>
+    <string name="retry">Réessayer</string>
+    <string name="review_comment">Commentaire (facultatif)</string>
+    <string name="review_save">Enregistrer le signalement</string>
+    <string name="review_edit_title">Corriger cette détection</string>
+    <string name="review_model_said">Modèle : %1$s, %2$d %%</string>
+    <string name="review_delete">Supprimer cette boîte</string>
+    <string name="review_detection_deleted">Boîte supprimée</string>
+    <string name="undo">Annuler</string>
+    <string name="review_discard">Abandonner</string>
+    <string name="review_discard_title">Abandonner ce signalement ?</string>
+    <string name="review_discard_message">La photo et les corrections seront supprimées.</string>
+    <string name="review_discard_confirm">Abandonner</string>
+    <string name="review_keep">Continuer</string>
 
     <string name="class_cardboard">Carton</string>
     <string name="class_fabrics">Textile</string>

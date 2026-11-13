@@ -11,11 +11,19 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.kdev66.ecoscan.AppContainer
+import com.kdev66.ecoscan.R
 import com.kdev66.ecoscan.appContainer
-import com.kdev66.ecoscan.ui.result.ResultScreen
+import com.kdev66.ecoscan.detection.WasteDetector
+import com.kdev66.ecoscan.ui.review.ReviewOutcome
+import com.kdev66.ecoscan.ui.review.ReviewScreen
+import com.kdev66.ecoscan.ui.review.ReviewViewModel
 import com.kdev66.ecoscan.ui.scanner.ScannerScreen
 import com.kdev66.ecoscan.ui.scanner.ScannerViewModel
 import com.kdev66.ecoscan.ui.theme.EcoScanTheme
@@ -27,11 +35,23 @@ class MainActivity : ComponentActivity() {
         val container = appContainer
         setContent {
             EcoScanTheme {
-                // Portée de l'activité : le scanner et le résultat partagent le même état.
+                // Portée de l'activité : le scanner garde son état pendant la revue.
                 val scanner: ScannerViewModel = viewModel(
-                    factory = viewModelFactory { initializer { ScannerViewModel { container.detector } } },
+                    factory = viewModelFactory {
+                        initializer {
+                            ScannerViewModel(
+                                detectorProvider = { container.detector },
+                                createDraft = { photo, result ->
+                                    val draft = container.reports.createDraft(photo, result, WasteDetector.MODEL_VERSION)
+                                    // La position est cherchée dès la capture, pendant que l'utilisateur est sur place.
+                                    container.location.locate(draft.id, draft.createdAtMs)
+                                    draft.id
+                                },
+                            )
+                        }
+                    },
                 )
-                EcoScanNavHost(scanner)
+                EcoScanNavHost(container, scanner)
             }
         }
     }
@@ -39,31 +59,48 @@ class MainActivity : ComponentActivity() {
 
 private object Routes {
     const val SCANNER = "scanner"
-    const val RESULT = "result"
+    const val REVIEW = "review/{reportId}"
+    fun review(reportId: String) = "review/$reportId"
 }
 
 @Composable
-private fun EcoScanNavHost(scanner: ScannerViewModel) {
+private fun EcoScanNavHost(container: AppContainer, scanner: ScannerViewModel) {
     val navController = rememberNavController()
     val state by scanner.state.collectAsStateWithLifecycle()
 
-    // Une photo analysée ouvre le résultat.
-    LaunchedEffect(state.captured) {
-        if (state.captured != null && navController.currentDestination?.route != Routes.RESULT) {
-            navController.navigate(Routes.RESULT)
-        }
+    // Un brouillon laissé par une application interrompue est rouvert au démarrage (PRD § 6).
+    LaunchedEffect(Unit) {
+        container.reports.latestDraftId()?.let { navController.openReview(it) }
+    }
+    // Une photo analysée ouvre sa revue.
+    LaunchedEffect(state.capturedReportId) {
+        state.capturedReportId?.let { navController.openReview(it) }
     }
 
     NavHost(navController, startDestination = Routes.SCANNER) {
         composable(Routes.SCANNER) { ScannerScreen(scanner) }
-        composable(Routes.RESULT) {
-            val captured = state.captured
-            if (captured != null) {
-                ResultScreen(captured, onNewScan = {
-                    scanner.newScan()
-                    navController.popBackStack(Routes.SCANNER, inclusive = false)
-                })
-            }
+        composable(Routes.REVIEW, arguments = listOf(navArgument("reportId") { type = NavType.StringType })) { entry ->
+            val reportId = requireNotNull(entry.arguments?.getString("reportId"))
+            val review: ReviewViewModel = viewModel(
+                factory = viewModelFactory {
+                    initializer { ReviewViewModel(reportId, container.reports, container.location, container.applicationScope) }
+                },
+            )
+            ReviewScreen(review, onFinished = { outcome ->
+                scanner.newScan(
+                    when (outcome) {
+                        ReviewOutcome.SAVED -> R.string.report_saved
+                        ReviewOutcome.DISCARDED -> R.string.report_discarded
+                        ReviewOutcome.MISSING -> null
+                    },
+                )
+                navController.popBackStack(Routes.SCANNER, inclusive = false)
+            })
         }
     }
+}
+
+private fun NavHostController.openReview(reportId: String) {
+    if (currentBackStackEntry?.arguments?.getString("reportId") == reportId) return
+    navigate(Routes.review(reportId)) { launchSingleTop = true }
 }

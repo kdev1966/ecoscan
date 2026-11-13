@@ -7,22 +7,55 @@
     <string name="analyzing">جارٍ التحليل…</string>
     <string name="inference_time">%1$d ملّي ثانية</string>
 
-    <string name="result_title">التحليل</string>
-    <plurals name="items_detected">
-        <item quantity="zero">لم يُرصد أي عنصر</item>
-        <item quantity="one">رُصد عنصر واحد</item>
-        <item quantity="two">رُصد عنصران</item>
-        <item quantity="few">رُصدت %d عناصر</item>
-        <item quantity="many">رُصد %d عنصرًا</item>
-        <item quantity="other">رُصد %d عنصر</item>
-    </plurals>
     <string name="result_none">لم تُرصد أي نفايات. حاول مجددًا بالاقتراب من الأرض.</string>
     <string name="result_estimate_note">الكميات تقديرية: قد تفوت بعض الأشياء المتراكبة.</string>
-    <string name="result_inference">مدة التحليل: %1$d ملّي ثانية</string>
-    <string name="new_scan">تحليل جديد</string>
 
     <string name="error_camera">الكاميرا غير متاحة</string>
     <string name="error_model">تعذّر تحميل نموذج الرصد</string>
+
+    <string name="error_storage">تعذّر حفظ البلاغ على الهاتف</string>
+    <string name="report_saved">تم حفظ البلاغ</string>
+    <string name="report_discarded">تم التخلي عن البلاغ</string>
+
+    <string name="review_title">مراجعة البلاغ</string>
+    <string name="review_tap_hint">المس إطارًا لتصحيحه أو حذفه.</string>
+    <string name="review_quantities">الكميات</string>
+    <plurals name="review_total">
+        <item quantity="zero">لا يوجد أي عنصر</item>
+        <item quantity="one">عنصر واحد في المجموع</item>
+        <item quantity="two">عنصران في المجموع</item>
+        <item quantity="few">%d عناصر في المجموع</item>
+        <item quantity="many">%d عنصرًا في المجموع</item>
+        <item quantity="other">%d عنصر في المجموع</item>
+    </plurals>
+    <string name="review_decrease">إنقاص واحد من %1$s</string>
+    <string name="review_increase">إضافة واحد إلى %1$s</string>
+    <string name="review_context">المكان</string>
+    <string name="context_beach">شاطئ</string>
+    <string name="context_rocky_coast">ساحل صخري</string>
+    <string name="context_forest">غابة</string>
+    <string name="context_city">مدينة</string>
+    <string name="review_experimental">تجريبي: تعلّم النموذج على الشواطئ فقط، والرصد هنا أقل موثوقية.</string>
+    <string name="review_position">الموقع</string>
+    <string name="position_accuracy">تم تحديد الموقع بدقة %1$d م</string>
+    <string name="position_known">تم تحديد الموقع</string>
+    <string name="position_searching">جارٍ تحديد الموقع… (يعمل دون شبكة)</string>
+    <string name="position_rationale">يستخدم EcoScan الموقع لتحديد مكان البلاغ. يبقى الموقع على هاتفك.</string>
+    <string name="position_grant">السماح بتحديد الموقع</string>
+    <string name="position_unavailable">الموقع غير متاح</string>
+    <string name="retry">إعادة المحاولة</string>
+    <string name="review_comment">تعليق (اختياري)</string>
+    <string name="review_save">حفظ البلاغ</string>
+    <string name="review_edit_title">تصحيح هذا الرصد</string>
+    <string name="review_model_said">النموذج: %1$s، %2$d%%</string>
+    <string name="review_delete">حذف هذا الإطار</string>
+    <string name="review_detection_deleted">تم حذف الإطار</string>
+    <string name="undo">تراجع</string>
+    <string name="review_discard">تخلٍّ</string>
+    <string name="review_discard_title">التخلي عن هذا البلاغ؟</string>
+    <string name="review_discard_message">ستُحذف الصورة والتصحيحات.</string>
+    <string name="review_discard_confirm">تخلٍّ</string>
+    <string name="review_keep">متابعة</string>
 
     <string name="class_cardboard">ورق مقوّى</string>
     <string name="class_fabrics">قماش</string>

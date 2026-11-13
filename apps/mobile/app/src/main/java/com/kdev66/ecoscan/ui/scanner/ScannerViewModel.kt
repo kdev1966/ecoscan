@@ -7,6 +7,7 @@ import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.ImageProxy
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.kdev66.ecoscan.R
 import com.kdev66.ecoscan.camera.toUprightBitmap
 import com.kdev66.ecoscan.detection.DetectionResult
@@ -15,25 +16,29 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
-
-/** Photo capturée et son analyse (la photo est réduite à 1 600 px au plus, cf. PRD § 6). */
-data class CapturedAnalysis(val photo: Bitmap, val result: DetectionResult)
 
 data class ScannerUiState(
     /** Dernière analyse de l'aperçu : sert à viser, pas au comptage. */
     val live: DetectionResult? = null,
     val capturing: Boolean = false,
-    val captured: CapturedAnalysis? = null,
+    /** Brouillon créé par la dernière capture : ouvre l'écran de revue. */
+    val capturedReportId: String? = null,
     @StringRes val error: Int? = null,
+    @StringRes val message: Int? = null,
 )
 
 /**
- * État du scanner. Partagé entre l'écran Scanner et l'écran Résultat.
- * Toute l'inférence passe par un seul thread ([analysisExecutor]) : le détecteur n'est pas réentrant.
+ * État du scanner. Toute l'inférence passe par un seul thread ([analysisExecutor]) : le détecteur n'est pas réentrant.
+ * [createDraft] enregistre la photo analysée (photo sur le disque puis brouillon en base) et rend l'identifiant du
+ * signalement.
  */
-class ScannerViewModel(private val detectorProvider: () -> WasteDetector) : ViewModel() {
+class ScannerViewModel(
+    private val detectorProvider: () -> WasteDetector,
+    private val createDraft: suspend (photo: Bitmap, result: DetectionResult) -> String,
+) : ViewModel() {
 
     val analysisExecutor: ExecutorService = Executors.newSingleThreadExecutor()
 
@@ -54,25 +59,32 @@ class ScannerViewModel(private val detectorProvider: () -> WasteDetector) : View
     fun analyzeFrame(image: ImageProxy) {
         image.use {
             val current = _state.value
-            if (current.capturing || current.captured != null) return
+            if (current.capturing || current.capturedReportId != null) return
             val d = detector ?: return
             val result = d.detect(it.toUprightBitmap())
-            Log.d(TAG, "aperçu ${result.imageWidth}x${result.imageHeight} : ${result.timings}")
-            _state.update { s -> if (s.capturing || s.captured != null) s else s.copy(live = result) }
+            _state.update { s -> if (s.capturing || s.capturedReportId != null) s else s.copy(live = result) }
         }
     }
 
     fun capture(imageCapture: ImageCapture) {
         // Ne pas toucher à `detector` ici : son premier accès charge le modèle, ce qui doit rester hors du thread principal.
         if (_state.value.capturing || _state.value.error == R.string.error_model) return
-        _state.update { it.copy(capturing = true) }
+        _state.update { it.copy(capturing = true, message = null) }
         imageCapture.takePicture(analysisExecutor, object : ImageCapture.OnImageCapturedCallback() {
             override fun onCaptureSuccess(image: ImageProxy) {
                 try {
                     val photo = image.use { it.toUprightBitmap(maxSide = PHOTO_MAX_SIDE) }
                     val d = detector ?: run { _state.update { it.copy(capturing = false) }; return }
                     val result = d.detect(photo)
-                    _state.update { it.copy(capturing = false, captured = CapturedAnalysis(photo, result)) }
+                    viewModelScope.launch {
+                        try {
+                            val id = createDraft(photo, result)
+                            _state.update { it.copy(capturing = false, capturedReportId = id) }
+                        } catch (e: Exception) {
+                            Log.e(TAG, "enregistrement du brouillon impossible", e)
+                            _state.update { it.copy(capturing = false, error = R.string.error_storage) }
+                        }
+                    }
                 } catch (e: Exception) {
                     Log.e(TAG, "analyse de la photo impossible", e)
                     _state.update { it.copy(capturing = false, error = R.string.error_camera) }
@@ -91,10 +103,13 @@ class ScannerViewModel(private val detectorProvider: () -> WasteDetector) : View
         _state.update { it.copy(error = R.string.error_camera) }
     }
 
-    /** Retour au scanner après un résultat. */
-    fun newScan() = _state.update { it.copy(captured = null, live = null) }
+    /** Retour au scanner après la revue, avec un message éventuel (signalement enregistré, abandonné). */
+    fun newScan(@StringRes message: Int? = null) =
+        _state.update { it.copy(capturedReportId = null, live = null, message = message) }
 
     fun dismissError() = _state.update { it.copy(error = null) }
+
+    fun messageShown() = _state.update { it.copy(message = null) }
 
     override fun onCleared() {
         analysisExecutor.shutdown()

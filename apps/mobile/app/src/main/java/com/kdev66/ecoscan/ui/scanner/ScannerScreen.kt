@@ -24,10 +24,13 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.AlertDialog
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -128,6 +131,21 @@ private fun CameraScanner(viewModel: ScannerViewModel) {
             Spacer(Modifier.height(12.dp))
             CaptureButton(capturing = state.capturing, onClick = { viewModel.capture(imageCapture) })
         }
+
+        val snackbar = remember { SnackbarHostState() }
+        val message = state.message?.let { stringResource(it) }
+        LaunchedEffect(message) {
+            if (message != null) {
+                snackbar.showSnackbar(message)
+                viewModel.messageShown()
+            }
+        }
+        SnackbarHost(
+            snackbar,
+            Modifier
+                .align(Alignment.Center)
+                .windowInsetsPadding(WindowInsets.safeDrawing),
+        )
 
         state.error?.let { message ->
             AlertDialog(

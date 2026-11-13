@@ -9,18 +9,51 @@
     <string name="analyzing">Analyzing…</string>
     <string name="inference_time">%1$d ms</string>
 
-    <string name="result_title">Analysis</string>
-    <plurals name="items_detected">
-        <item quantity="one">%d item detected</item>
-        <item quantity="other">%d items detected</item>
-    </plurals>
     <string name="result_none">No litter detected. Try again closer to the ground.</string>
     <string name="result_estimate_note">Counts are estimates: overlapping items may be missed.</string>
-    <string name="result_inference">Analysis time: %1$d ms</string>
-    <string name="new_scan">New scan</string>
 
     <string name="error_camera">Camera unavailable</string>
     <string name="error_model">The detection model could not be loaded</string>
+
+    <string name="error_storage">The report could not be saved on the phone</string>
+    <string name="report_saved">Report saved</string>
+    <string name="report_discarded">Report discarded</string>
+
+    <string name="review_title">Check the report</string>
+    <string name="review_tap_hint">Tap a box to correct or delete it.</string>
+    <string name="review_quantities">Quantities</string>
+    <plurals name="review_total">
+        <item quantity="one">%d item in total</item>
+        <item quantity="other">%d items in total</item>
+    </plurals>
+    <string name="review_decrease">One less %1$s</string>
+    <string name="review_increase">One more %1$s</string>
+    <string name="review_context">Place</string>
+    <string name="context_beach">Beach</string>
+    <string name="context_rocky_coast">Rocky shore</string>
+    <string name="context_forest">Forest</string>
+    <string name="context_city">City</string>
+    <string name="review_experimental">Experimental: the model was trained on beaches only, detection here is less reliable.</string>
+    <string name="review_position">Position</string>
+    <string name="position_accuracy">Located, accurate to %1$d m</string>
+    <string name="position_known">Located</string>
+    <string name="position_searching">Finding the position… (works without network)</string>
+    <string name="position_rationale">EcoScan uses the position to place the report on a map. It stays on your phone.</string>
+    <string name="position_grant">Allow location</string>
+    <string name="position_unavailable">Position unavailable</string>
+    <string name="retry">Retry</string>
+    <string name="review_comment">Comment (optional)</string>
+    <string name="review_save">Save the report</string>
+    <string name="review_edit_title">Correct this detection</string>
+    <string name="review_model_said">Model: %1$s, %2$d%%</string>
+    <string name="review_delete">Delete this box</string>
+    <string name="review_detection_deleted">Box deleted</string>
+    <string name="undo">Undo</string>
+    <string name="review_discard">Discard</string>
+    <string name="review_discard_title">Discard this report?</string>
+    <string name="review_discard_message">The photo and the corrections will be deleted.</string>
+    <string name="review_discard_confirm">Discard</string>
+    <string name="review_keep">Keep editing</string>
 
     <string name="class_cardboard">Cardboard</string>
     <string name="class_fabrics">Fabric</string>
