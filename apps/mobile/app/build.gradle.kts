@@ -2,7 +2,11 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("org.jetbrains.kotlin.plugin.compose")
+    id("com.google.devtools.ksp")
 }
+
+// Schémas Room versionnés dans le dépôt : base des migrations futures.
+ksp { arg("room.schemaLocation", "$projectDir/schemas") }
 
 android {
     namespace = "com.kdev66.ecoscan"
@@ -68,7 +72,16 @@ dependencies {
     implementation("com.google.ai.edge.litert:litert-gpu:1.4.2")
     implementation("com.google.ai.edge.litert:litert-gpu-api:1.4.2")
 
+    // Signalements : base locale (Room) et position (Fused Location, fonctionne sans réseau grâce au GPS)
+    val room = "2.6.1"
+    implementation("androidx.room:room-runtime:$room")
+    implementation("androidx.room:room-ktx:$room")
+    ksp("androidx.room:room-compiler:$room")
+    implementation("com.google.android.gms:play-services-location:21.3.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.8.1")
+
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.2.1")
     androidTestImplementation("androidx.test:runner:1.6.2")
+    androidTestImplementation("androidx.exifinterface:exifinterface:1.3.2") // même version que CameraX (dépendance de l'app)
 }
